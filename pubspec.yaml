@@ -55,7 +55,7 @@ flutter:
     - family: "Urbanist"
       fonts:
         - asset: assets/font/Urbanist-Regular.ttf
-        - asset: fonts/Schyler-Italic.ttf
+        - asset: assets/font/Urbanist-Medium.ttf
           # style: italic
   #   - family: Trajan Pro
   #     fonts:

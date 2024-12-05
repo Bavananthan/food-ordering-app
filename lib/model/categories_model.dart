@@ -71,7 +71,7 @@ class CategoriesModel {
 
 class MenuEntity {
   String id;
-  Type type;
+  String type;
 
   MenuEntity({
     required this.id,

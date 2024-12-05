@@ -89,7 +89,7 @@ class Description {
 
 class ModifierOption {
   String id;
-  Type type;
+  String type;
 
   ModifierOption({
     required this.id,
