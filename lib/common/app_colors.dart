@@ -7,4 +7,5 @@ class AppColors {
   Color textColor = Color(0xff060606);
   Color yellow = Color(0xffFFB200);
   Color lightGray = Color(0xffEBEFF8);
+  Color shadow = Color(0xff333333);
 }

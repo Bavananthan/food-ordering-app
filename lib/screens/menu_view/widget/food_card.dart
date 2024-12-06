@@ -5,7 +5,7 @@ class FoodCard extends StatelessWidget {
   final String name;
   final String description;
   final String imageUrl;
-  final double price;
+  final int price;
   final bool isPromotionAvailable;
   final VoidCallback onTab;
   const FoodCard(
@@ -19,47 +19,99 @@ class FoodCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(imageUrl),
-                fit: BoxFit.cover,
-              ),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            padding: EdgeInsets.all(10),
+    return GestureDetector(
+      onTap: onTab,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                // decoration:
+                //     BoxDecoration(borderRadius: BorderRadius.circular(100)),
+                // height: 70,
+                // width: 70,
+                child: Image.network(imageUrl,
+                    frameBuilder: (_, image, loadingBuilder, __) {
+                      if (loadingBuilder == null) {
+                        return const SizedBox(
+                          height: 300,
+                          child: Center(child: CircularProgressIndicator()),
+                        );
+                      }
+                      return image;
+                    },
+                    loadingBuilder: (BuildContext context, Widget image,
+                        ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return image;
+                      return SizedBox(
+                        height: 300,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            value: loadingProgress.expectedTotalBytes != null
+                                ? loadingProgress.cumulativeBytesLoaded /
+                                    loadingProgress.expectedTotalBytes!
+                                : null,
+                          ),
+                        ),
+                      );
+                    },
+                    errorBuilder: (_, __, ___) => const Icon(
+                          Icons.error,
+                          size: 50,
+                        ))),
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Flexible(
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   name,
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: texts.textSize16, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 Text(
                   description,
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(fontSize: texts.textSize14),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(
+                  height: 10,
+                ),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Text(
-                      'Price: $price',
+                      '\$ ${price}',
+                      style: TextStyle(
+                          fontSize: texts.textSize14, color: color.baseColor),
+                    ),
+                    const SizedBox(
+                      width: 10,
                     ),
                     if (isPromotionAvailable)
-                      Container(
-                        color: color.yellow,
-                        child: Text("2 Promotions Available"),
+                      Flexible(
+                        child: Container(
+                          color: color.yellow,
+                          child: const Padding(
+                            padding: EdgeInsets.all(3.0),
+                            child: Text(" Promotions Available "),
+                          ),
+                        ),
                       ),
                   ],
                 ),
               ],
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

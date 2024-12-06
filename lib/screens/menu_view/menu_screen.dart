@@ -39,9 +39,7 @@ class MenuScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                             onTap: () {
-                              if (viewModel.tapMenuIndex != -1) {
-                                Navigator.pop(context);
-                              }
+                              Navigator.pop(context);
                             },
                             child: Icon(Icons.close))
                       ],
@@ -49,46 +47,56 @@ class MenuScreen extends StatelessWidget {
                   ),
                   Divider(),
                   Expanded(
-                    child: ListView.separated(
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding:
-                                const EdgeInsets.only(right: 10.0, left: 10),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: color.lightGray)),
-                              child: ListTile(
-                                onTap: () {
-                                  viewModel.onTapMenu(
-                                    context,
-                                    index: index,
-                                    value:
-                                        commonProvider.menuList[index].title.en,
-                                    id: commonProvider.menuList[index].menuId,
-                                  );
-                                },
-                                trailing: CircleAvatar(
-                                  backgroundColor:
-                                      viewModel.tapMenuIndex == index
-                                          ? color.baseColor
-                                          : color.primaryColor,
-                                  maxRadius: 15,
-                                  child: CircleAvatar(
-                                    maxRadius: 5,
-                                    backgroundColor: color.primaryColor,
-                                  ),
-                                ),
-                                title: Text(
-                                    commonProvider.menuList[index].title.en),
+                      child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0, left: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: color.lightGray)),
+                          child: ListTile(
+                            onTap: () {
+                              viewModel.onTapMenu();
+                            },
+                            trailing: CircleAvatar(
+                              backgroundColor: commonProvider.isLunch
+                                  ? color.baseColor
+                                  : color.primaryColor,
+                              maxRadius: 15,
+                              child: CircleAvatar(
+                                maxRadius: 5,
+                                backgroundColor: color.primaryColor,
                               ),
                             ),
-                          );
-                        },
-                        separatorBuilder: (context, index) => SizedBox(
-                              height: 10,
+                            title: Text("Lunch · 10am - 5pm"),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 10.0, left: 10),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: color.lightGray)),
+                          child: ListTile(
+                            onTap: () {
+                              viewModel.onTapMenu();
+                            },
+                            trailing: CircleAvatar(
+                              backgroundColor: commonProvider.isBreakfast
+                                  ? color.baseColor
+                                  : color.primaryColor,
+                              maxRadius: 15,
+                              child: CircleAvatar(
+                                maxRadius: 5,
+                                backgroundColor: color.primaryColor,
+                              ),
                             ),
-                        itemCount: commonProvider.menuList.length),
-                  )
+                            title: Text("Breakfast · 5pm - 11pm "),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ))
                 ],
               ),
             ),
