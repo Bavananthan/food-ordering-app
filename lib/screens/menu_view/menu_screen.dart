@@ -39,7 +39,9 @@ class MenuScreen extends StatelessWidget {
                         ),
                         GestureDetector(
                             onTap: () {
-                              Navigator.pop(context);
+                              if (viewModel.tapMenuIndex != -1) {
+                                Navigator.pop(context);
+                              }
                             },
                             child: Icon(Icons.close))
                       ],
@@ -58,9 +60,12 @@ class MenuScreen extends StatelessWidget {
                               child: ListTile(
                                 onTap: () {
                                   viewModel.onTapMenu(
-                                      index: index,
-                                      value: commonProvider
-                                          .menuList[index].title.en);
+                                    context,
+                                    index: index,
+                                    value:
+                                        commonProvider.menuList[index].title.en,
+                                    id: commonProvider.menuList[index].menuId,
+                                  );
                                 },
                                 trailing: CircleAvatar(
                                   backgroundColor:
@@ -92,4 +97,11 @@ class MenuScreen extends StatelessWidget {
       },
     );
   }
+}
+
+class MenuList {
+  String id;
+  String menuName;
+
+  MenuList({required this.id, required this.menuName});
 }

@@ -14,6 +14,14 @@ class MenuView extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     return ViewModelBuilder<MenuViewModel>.reactive(
       viewModelBuilder: () => MenuViewModel(),
+      onViewModelReady: (model) async {
+        model.setBusy(true);
+        //after this context load finished then show rthis showBottom sheet
+
+        Future.delayed(const Duration(seconds: 3), () async {
+          await model.showBottomSheetMenu(context);
+        });
+      },
       builder: (context, viewModel, child) {
         return Scaffold(
           backgroundColor: color.primaryColor,
@@ -66,48 +74,43 @@ class MenuView extends StatelessWidget {
               const SizedBox(
                 height: 30,
               ),
-              Padding(
-                padding: const EdgeInsets.only(right: 15, left: 15),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        showModalBottomSheet(
-                          useRootNavigator: true,
-                          clipBehavior: Clip.antiAlias,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20.0),
-                              topRight: Radius.circular(20.0),
-                            ),
-                          ),
-                          enableDrag: true,
-                          context: context,
-                          builder: (context) => MenuScreen(),
-                        );
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(color: color.darkGray),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
+              viewModel.isBusy
+                  ? Expanded(child: Center(child: CircularProgressIndicator()))
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 15, left: 15),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(viewModel.menuName),
-                              Icon(Icons.keyboard_arrow_down),
+                              GestureDetector(
+                                onTap: () {
+                                  viewModel.showBottomSheetMenu(context);
+                                },
+                                child: Container(
+                                  decoration:
+                                      BoxDecoration(color: color.darkGray),
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Row(
+                                      children: [
+                                        Text(viewModel.menuName),
+                                        Icon(Icons.keyboard_arrow_down),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.search)
                             ],
                           ),
                         ),
-                      ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        _CategoryList(),
+                      ],
                     ),
-                    const Icon(Icons.search)
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              _CategoryList(),
               CommonButton(
                 onPressed: () {},
                 title: "Basket",
@@ -137,7 +140,8 @@ class _CategoryList extends ViewModelWidget<MenuViewModel> {
               final category = commonProvider.categoryList[index];
               return GestureDetector(
                 onTap: () {
-                  model.onTapCategory(index: index);
+                  model.onTapCategory(
+                      index: index, id: category.menuCategoryId);
                 },
                 child: Container(
                   decoration: BoxDecoration(
