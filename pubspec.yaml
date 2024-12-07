@@ -20,6 +20,7 @@ dependencies:
   provider: ^6.1.2
   stacked: ^3.4.3
   get_it: ^7.7.0
+  overlay_support: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -38,6 +39,7 @@ flutter:
   assets:
     - assets/png/
     - assets/font/
+    - assets/json/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -54,7 +56,7 @@ flutter:
     - family: "Urbanist"
       fonts:
         - asset: assets/font/Urbanist-Regular.ttf
-        - asset: fonts/Schyler-Italic.ttf
+        - asset: assets/font/Urbanist-Medium.ttf
           # style: italic
   #   - family: Trajan Pro
   #     fonts:
