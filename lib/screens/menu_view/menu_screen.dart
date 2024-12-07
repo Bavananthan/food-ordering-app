@@ -1,5 +1,6 @@
 import 'package:ecologital/provider/locator.dart';
 import 'package:ecologital/screens/menu_view/menu_view_model.dart';
+import 'package:ecologital/widgets/common_button.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
@@ -10,6 +11,7 @@ class MenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
     return ViewModelBuilder<MenuViewModel>.reactive(
       viewModelBuilder: () => MenuViewModel(),
       builder: (context, viewModel, child) {
@@ -94,6 +96,16 @@ class MenuScreen extends StatelessWidget {
                             title: Text("Breakfast · 5pm - 11pm "),
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      CommonButton(
+                        isColor: true,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        title: "Done",
                       ),
                     ],
                   ))

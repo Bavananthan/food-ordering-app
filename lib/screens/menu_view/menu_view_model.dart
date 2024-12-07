@@ -44,6 +44,7 @@ class MenuViewModel extends BaseViewModel {
 
   showBottomSheetMenu(BuildContext context) {
     showModalBottomSheet(
+      scrollControlDisabledMaxHeightRatio: 0.4,
       showDragHandle: true,
       clipBehavior: Clip.antiAlias,
       shape: const RoundedRectangleBorder(
