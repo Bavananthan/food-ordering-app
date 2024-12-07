@@ -119,6 +119,27 @@ class MenuViewModel extends BaseViewModel {
     notifyListeners();
   }
 
+//select type of order
+  void onTabOrder({required OrderTypeEnum type}) {
+    if (type == OrderTypeEnum.delivery) {
+      commonProvider.setIsDelivery = true;
+      commonProvider.setIsPickup = false;
+      commonProvider.setIsTable = false;
+    } else if (type == OrderTypeEnum.table) {
+      commonProvider.setIsDelivery = false;
+      commonProvider.setIsPickup = false;
+      commonProvider.setIsTable = true;
+    } else {
+      commonProvider.setIsDelivery = false;
+      commonProvider.setIsPickup = true;
+      commonProvider.setIsTable = false;
+    }
+    print("isdeliveru ${commonProvider.isDelivery}");
+    print("istable ${commonProvider.isTable}");
+    print("ispick ${commonProvider.isPickup}");
+    notifyListeners();
+  }
+
   void onItemTaped(BuildContext context, {required String id}) {
     showModalBottomSheet(
       //showDragHandle: true,
@@ -134,7 +155,9 @@ class MenuViewModel extends BaseViewModel {
       context: context,
       builder: (context) => ItemView(id: id),
     ).then(
-      (value) {},
+      (value) {
+        notifyListeners();
+      },
     );
     //Handel Navigation
   }

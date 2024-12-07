@@ -25,6 +25,35 @@ class CommonProvider extends ChangeNotifier {
   List<ItemModel> _cartItemList = [];
   List<ItemModel> get cartItemList => _cartItemList;
   set setCartItemList(List<ItemModel> value) => _cartItemList = value;
+//total price of cart item list
+  int _totalPrice = 0;
+  int get totalPrice => _totalPrice;
+
+//remove duplicate list in cart list count
+  int _count = 1;
+  int get count => _count;
+
+  removeDuplicate() {
+    List nonDuplicate = cartItemList.toSet().toList();
+    print(nonDuplicate.length);
+    _count = nonDuplicate.length;
+    notifyListeners();
+  }
+
+//calculate total price pase on the order type
+  sumOfPrice() {
+    _totalPrice = 0;
+    for (var element in cartItemList) {
+      if (_isDelivery) {
+        _totalPrice = totalPrice + element.priceInfo.price.deliveryPrice;
+      } else if (_isPickup) {
+        _totalPrice = totalPrice + element.priceInfo.price.pickupPrice;
+      } else {
+        _totalPrice = totalPrice + element.priceInfo.price.tablePrice;
+      }
+    }
+    notifyListeners();
+  }
 
   bool isLunch = false;
   bool isBreakfast = true;
@@ -48,25 +77,4 @@ class CommonProvider extends ChangeNotifier {
   bool _isTable = false;
   bool get isTable => _isTable;
   set setIsTable(value) => _isTable = value;
-
-//select type of order
-  void onTabOrder({required OrderTypeEnum type}) {
-    if (type == OrderTypeEnum.delivery) {
-      setIsDelivery = true;
-      setIsPickup = false;
-      setIsTable = false;
-    } else if (type == OrderTypeEnum.table) {
-      setIsDelivery = false;
-      setIsPickup = false;
-      setIsTable = true;
-    } else {
-      setIsDelivery = false;
-      setIsPickup = true;
-      setIsTable = false;
-    }
-    print("isdeliveru ${isDelivery}");
-    print("istable ${isTable}");
-    print("ispick ${isPickup}");
-    notifyListeners();
-  }
 }

@@ -1,6 +1,7 @@
 import 'package:ecologital/model/item_model/item_model.dart';
 import 'package:ecologital/model/modifierGroups/modifier_groups_model.dart';
 import 'package:ecologital/provider/locator.dart';
+import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 
 class ItemViewModel extends BaseViewModel {
@@ -72,6 +73,64 @@ class ItemViewModel extends BaseViewModel {
   List<ItemModel> _tempCartItemList = [];
   List<ItemModel> get tempCartItemList => _tempCartItemList;
   set setTempCartItemList(List<ItemModel> value) => _tempCartItemList = value;
+
+  //product count
+  int _count = 0;
+  int get count => _count;
+
+  void increase() {
+    if (count > -1) {
+      _count++;
+      tempCartItemList.add(item);
+      sumOfPrice();
+      print(tempCartItemList.length);
+    }
+    notifyListeners();
+  }
+
+  void decrease() {
+    if (count > 0 && tempCartItemList.isNotEmpty) {
+      _count--;
+
+      tempCartItemList.removeLast();
+      sumOfPrice();
+      print(tempCartItemList.length);
+    }
+    notifyListeners();
+  }
+
+//total price of temp cart item list
+  int _totalPrice = 0;
+  int get totalPrice => _totalPrice;
+  sumOfPrice() {
+    _totalPrice = 0;
+    for (var element in tempCartItemList) {
+      if (commonProvider.isDelivery) {
+        _totalPrice = totalPrice + element.priceInfo.price.deliveryPrice;
+      } else if (commonProvider.isPickup) {
+        _totalPrice = totalPrice + element.priceInfo.price.pickupPrice;
+      } else {
+        _totalPrice = totalPrice + element.priceInfo.price.tablePrice;
+      }
+    }
+    notifyListeners();
+  }
+
+  void addCartList(BuildContext context) async {
+    if (count > 0) {
+      commonProvider.cartItemList.addAll(tempCartItemList);
+      await commonProvider.removeDuplicate();
+      await commonProvider.sumOfPrice();
+    }
+
+    print(commonProvider.cartItemList.length);
+    Navigator.pop(context);
+    notifyListeners();
+  }
+
+  bool _isTab = false;
+  bool get isTab => _isTab;
+  set setIsTab(value) => _isTab = value;
 }
 
 class CartItemModel {

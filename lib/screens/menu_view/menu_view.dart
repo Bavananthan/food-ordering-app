@@ -14,7 +14,13 @@ class MenuView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+    bool isPortrait =
+        MediaQuery.of(context).orientation == Orientation.portrait;
     print(screenWidth);
+    print(screenHeight);
     return ViewModelBuilder<MenuViewModel>.reactive(
       viewModelBuilder: () => MenuViewModel(),
       onViewModelReady: (model) async {
@@ -36,10 +42,13 @@ class MenuView extends StatelessWidget {
                 clipBehavior: Clip.none,
                 //fit: StackFit.passthrough,
                 children: [
-                  SizedBox(
-                      height: 250,
-                      width: screenWidth,
-                      child: Image.asset(coverContainer, fit: BoxFit.fill)),
+                  Visibility(
+                    visible: isPortrait,
+                    child: SizedBox(
+                        height: screenHeight / 3,
+                        width: screenWidth,
+                        child: Image.asset(coverContainer, fit: BoxFit.fill)),
+                  ),
                   Positioned(
                     bottom: -30,
                     left: 80,
@@ -55,7 +64,7 @@ class MenuView extends StatelessWidget {
                         children: [
                           Flexible(
                             child: GestureDetector(
-                              onTap: () => commonProvider.onTabOrder(
+                              onTap: () => viewModel.onTabOrder(
                                   type: OrderTypeEnum.delivery),
                               child: Center(
                                   child: SizedBox(
@@ -72,7 +81,7 @@ class MenuView extends StatelessWidget {
                           ),
                           Flexible(
                               child: GestureDetector(
-                            onTap: () => commonProvider.onTabOrder(
+                            onTap: () => viewModel.onTabOrder(
                                 type: OrderTypeEnum.pickup),
                             child: SizedBox(
                               height: 60,
@@ -89,8 +98,8 @@ class MenuView extends StatelessWidget {
                           )),
                           Flexible(
                               child: GestureDetector(
-                            onTap: () => commonProvider.onTabOrder(
-                                type: OrderTypeEnum.table),
+                            onTap: () =>
+                                viewModel.onTabOrder(type: OrderTypeEnum.table),
                             child: Center(
                                 child: SizedBox(
                               height: 60,
@@ -159,17 +168,52 @@ class MenuView extends StatelessWidget {
                         ),
                       ),
                     ),
-              CommonButton(
-                onPressed: () {},
-                title: "Basket",
-              ),
               const SizedBox(
-                height: 10,
+                height: 5,
               ),
-              CommonButton(
-                isColor: false,
-                onPressed: () {},
-                title: "View Basket",
+              Visibility(
+                visible: isPortrait,
+                child: Column(
+                  children: [
+                    CommonButton(
+                      onPressed: () {},
+                      title:
+                          "Basket .${commonProvider.count} items . \$ ${commonProvider.totalPrice}",
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CommonButton(
+                      isColor: false,
+                      onPressed: () {},
+                      title: "View Basket",
+                    ),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: isLandscape,
+                child: Row(
+                  children: [
+                    Flexible(
+                      child: CommonButton(
+                        onPressed: () {},
+                        title:
+                            "Basket .${commonProvider.count} items . \$ ${commonProvider.totalPrice}",
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    Flexible(
+                      child: CommonButton(
+                        isColor: false,
+                        onPressed: () {},
+                        title: "View Basket",
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 10,
